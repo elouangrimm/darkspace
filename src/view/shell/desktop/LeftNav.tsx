@@ -633,7 +633,7 @@ export function DesktopLeftNav() {
                 width={NAV_ICON_WIDTH}
               />
             }
-            label={_(msg`Explore`)}
+            label={_(msg`Search`)}
           />
           <NavItem
             href="/notifications"
@@ -655,42 +655,6 @@ export function DesktopLeftNav() {
             label={_(msg`Notifications`)}
           />
           <ChatNavItem />
-          <NavItem
-            href="/feeds"
-            icon={
-              <Hashtag
-                style={pal.text}
-                aria-hidden={true}
-                width={NAV_ICON_WIDTH}
-              />
-            }
-            iconFilled={
-              <HashtagFilled
-                style={pal.text}
-                aria-hidden={true}
-                width={NAV_ICON_WIDTH}
-              />
-            }
-            label={_(msg`Feeds`)}
-          />
-          <NavItem
-            href="/lists"
-            icon={
-              <List
-                style={pal.text}
-                aria-hidden={true}
-                width={NAV_ICON_WIDTH}
-              />
-            }
-            iconFilled={
-              <ListFilled
-                style={pal.text}
-                aria-hidden={true}
-                width={NAV_ICON_WIDTH}
-              />
-            }
-            label={_(msg`Lists`)}
-          />
           <NavItem
             href={currentAccount ? makeProfileLink(currentAccount) : '/'}
             icon={

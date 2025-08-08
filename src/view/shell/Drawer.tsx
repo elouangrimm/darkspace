@@ -290,8 +290,6 @@ let DrawerContent = ({}: React.PropsWithoutRef<{}>): React.ReactNode => {
               isActive={isAtNotifications}
               onPress={onPressNotifications}
             />
-            <FeedsMenuItem isActive={isAtFeeds} onPress={onPressMyFeeds} />
-            <ListsMenuItem onPress={onPressLists} />
             <ProfileMenuItem
               isActive={isAtMyProfile}
               onPress={onPressProfile}
@@ -400,7 +398,7 @@ let SearchMenuItem = ({
           <MagnifyingGlass style={[t.atoms.text]} width={iconWidth} />
         )
       }
-      label={_(msg`Explore`)}
+      label={_(msg`Search`)}
       bold={isActive}
       onPress={onPress}
     />
