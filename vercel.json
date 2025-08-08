@@ -1,0 +1,6 @@
+{
+  "framework": "create-react-app",
+  "buildCommand": "npx expo export:web",
+  "outputDirectory": "web-build",
+  "installCommand": "yarn install"
+}
