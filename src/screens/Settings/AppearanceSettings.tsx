@@ -13,6 +13,7 @@ import {
   type NativeStackScreenProps,
 } from '#/lib/routes/types'
 import {useGate} from '#/lib/statsig/statsig'
+import React from 'react'
 import {isNative} from '#/platform/detection'
 import {useSetThemePrefs, useThemePrefs} from '#/state/shell'
 import {SettingsListItem as AppIconSettingsListItem} from '#/screens/Settings/AppIconSettings/SettingsListItem'
@@ -26,12 +27,15 @@ import {TitleCase_Stroke2_Corner0_Rounded as Aa} from '#/components/icons/TitleC
 import * as Layout from '#/components/Layout'
 import {Text} from '#/components/Typography'
 import {IS_INTERNAL} from '#/env'
+import {Slider} from '#/components/forms/Slider'
+import {Palette_Stroke2_Corner0_Rounded as PaletteIcon} from '#/components/icons/Palette'
 import * as SettingsList from './components/SettingsList'
 
 type Props = NativeStackScreenProps<CommonNavigatorParams, 'AppearanceSettings'>
 export function AppearanceSettingsScreen({}: Props) {
   const {_} = useLingui()
-  const {fonts} = useAlf()
+  const {fonts, setPrimaryHue} = useAlf()
+  const t = useTheme()
   const gate = useGate()
 
   const {colorMode, darkTheme} = useThemePrefs()
@@ -136,6 +140,8 @@ export function AppearanceSettingsScreen({}: Props) {
               </Animated.View>
             )}
 
+            <ThemeHueSliderGroup />
+
             <Animated.View layout={native(LinearTransition)}>
               <SettingsList.Divider />
 
@@ -191,6 +197,67 @@ export function AppearanceSettingsScreen({}: Props) {
         </Layout.Content>
       </Layout.Screen>
     </LayoutAnimationConfig>
+  )
+}
+
+import {Button, ButtonText} from '#/components/Button'
+import * as persisted from '#/state/persisted'
+import {BLUE_HUE} from '#/alf/util/colorGeneration'
+
+export function ThemeHueSliderGroup() {
+  const {_} = useLingui()
+  const alf = useAlf()
+  const t = useTheme()
+  const [hue, setHue] = React.useState(persisted.get('primaryHue') ?? BLUE_HUE)
+
+  const onStopSliding = React.useCallback(
+    (v: number) => {
+      alf.setPrimaryHue(v)
+    },
+    [alf],
+  )
+
+  const onReset = React.useCallback(() => {
+    setHue(BLUE_HUE)
+    alf.setPrimaryHue(BLUE_HUE)
+  }, [alf, setHue])
+
+  const color = React.useMemo(() => `hsl(${hue}, 100%, 50%)`, [hue])
+
+  return (
+    <>
+      <SettingsList.Group contentContainerStyle={[a.gap_sm]} iconInset={false}>
+        <SettingsList.ItemIcon icon={PaletteIcon} />
+        <SettingsList.ItemText>
+          <Trans>Theme color</Trans>
+        </SettingsList.ItemText>
+        <Text
+          style={[
+            a.text_sm,
+            a.leading_snug,
+            t.atoms.text_contrast_medium,
+            a.w_full,
+          ]}>
+          <Trans>Choose your own theme color.</Trans>
+        </Text>
+        <Slider
+          min={0}
+          max={360}
+          step={1}
+          value={hue}
+          onValueChange={setHue}
+          onStopSliding={onStopSliding}
+          thumbTintColor={color}
+          minimumTrackTintColor={color}
+          maximumTrackTintColor={t.atoms.border_contrast_low.borderColor}
+        />
+        <Button onPress={onReset} label={_(msg`Reset theme color`)}>
+          <ButtonText>
+            <Trans>Reset</Trans>
+          </ButtonText>
+        </Button>
+      </SettingsList.Group>
+    </>
   )
 }
 

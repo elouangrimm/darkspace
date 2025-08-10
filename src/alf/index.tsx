@@ -10,6 +10,7 @@ import {
 import {createThemes, defaultTheme} from '#/alf/themes'
 import {Theme, ThemeName} from '#/alf/types'
 import {BLUE_HUE, GREEN_HUE, RED_HUE} from '#/alf/util/colorGeneration'
+import * as persisted from '#/state/persisted'
 import {Device} from '#/storage'
 
 export {atoms} from '#/alf/atoms'
@@ -37,6 +38,7 @@ export type Alf = {
    * Feature flags or other gated options
    */
   flags: {}
+  setPrimaryHue: (hue: number) => void
 }
 
 /*
@@ -60,6 +62,7 @@ export const Context = React.createContext<Alf>({
     setFontFamily: () => {},
   },
   flags: {},
+  setPrimaryHue: () => {},
 })
 
 export function ThemeProvider({
@@ -94,15 +97,25 @@ export function ThemeProvider({
     },
     [setFontFamily],
   )
+  const [primaryHue, setPrimaryHue] = React.useState<number>(
+    () => persisted.get('primaryHue') ?? BLUE_HUE,
+  )
+  const setPrimaryHueAndPersist = React.useCallback<Alf['setPrimaryHue']>(
+    hue => {
+      setPrimaryHue(hue)
+      persisted.write('primaryHue', hue)
+    },
+    [setPrimaryHue],
+  )
   const themes = React.useMemo(() => {
     return createThemes({
       hues: {
-        primary: BLUE_HUE,
+        primary: primaryHue,
         negative: RED_HUE,
         positive: GREEN_HUE,
       },
     })
-  }, [])
+  }, [primaryHue])
 
   const value = React.useMemo<Alf>(
     () => ({
@@ -117,6 +130,7 @@ export function ThemeProvider({
         setFontFamily: setFontFamilyAndPersist,
       },
       flags: {},
+      setPrimaryHue: setPrimaryHueAndPersist,
     }),
     [
       themeName,
@@ -126,6 +140,7 @@ export function ThemeProvider({
       fontFamily,
       setFontFamilyAndPersist,
       fontScaleMultiplier,
+      setPrimaryHueAndPersist,
     ],
   )
 
