@@ -55,9 +55,9 @@ export const Context = React.createContext<Alf>({
     },
   }),
   fonts: {
-    scale: getFontScale(),
-    scaleMultiplier: computeFontScaleMultiplier(getFontScale()),
-    family: getFontFamily(),
+    scale: '0',
+    scaleMultiplier: 1,
+    family: 'system',
     setFontScale: () => {},
     setFontFamily: () => {},
   },
