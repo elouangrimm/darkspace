@@ -28,7 +28,7 @@ import * as Layout from '#/components/Layout'
 import {Text} from '#/components/Typography'
 import {IS_INTERNAL} from '#/env'
 import {Slider} from '#/components/forms/Slider'
-import {Palette_Stroke2_Corner0_Rounded as PaletteIcon} from '#/components/icons/ColorPalette'
+import {ColorPalette_Stroke2_Corner0_Rounded as PaletteIcon} from '#/components/icons/ColorPalette'
 import * as SettingsList from './components/SettingsList'
 
 type Props = NativeStackScreenProps<CommonNavigatorParams, 'AppearanceSettings'>
